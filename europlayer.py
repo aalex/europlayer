@@ -19,8 +19,8 @@ class Configuration(object):
         self.filenames = []
         self.window_width = 1024
         self.window_height = 768
-        self.start_fullscreen = False
-        self.show_cursor = True
+        self.start_fullscreen = True
+        self.show_cursor = False
         self.initial_clip_number = 0
         # TODO: add image on top
         # TODO: vertial-align
