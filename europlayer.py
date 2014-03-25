@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # Copyright (C) 2014 Alexandre Quessy
-# See LICENSE
+# See LICENSE (LGPL 2)
 """
 Video player for live arts.
+Usage: Create video a.mov, b.mov and c.mov.
+       Put them all in the same directory
+       Then, run this script and press letters A, B, C to switch video.
+       They should all play in loops.
+Deps:  Python, Clutter, Clutter-GStreamer
 """
 import os
 import sys
