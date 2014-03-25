@@ -8,6 +8,7 @@ Usage: Create video a.mov, b.mov and c.mov.
        Then, run this script and press letters A, B, C to switch video.
        They should all play in loops.
 Deps:  Python, Clutter, Clutter-GStreamer
+Bugs:  When I change the clip being played, the eos signal of the video texture is not triggered anymore.
 """
 import os
 import sys
