@@ -192,6 +192,7 @@ class Application(object):
             if self._eos_handler_id is not None:
                 print("disconnect")
                 self._video_texture.disconnect(self._eos_handler_id)
+            print("reconnect")
             self._eos_handler_id = self._video_texture.connect("eos", self._video_texture_eos_cb)
         return success
 
