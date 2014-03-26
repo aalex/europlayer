@@ -92,6 +92,7 @@ class Application(object):
 
         self._eos_handler_id = None
         self.play_clip_number(self._current_clip_number)
+
         self._stage.show()
 
 
@@ -115,16 +116,24 @@ class Application(object):
             
 
     def _stage_allocation_changed_cb(self, stage, box, flags):
-        pass
+        self._resize_image()
 
 
     def _video_texture_size_change_cb(self, texture, base_width, base_height):
+        self._resize_image()
+
+
+    def _resize_image(self):
         stage_width, stage_height = self._stage.get_size()
         # base_width and base_height are the actual dimensions of the buffers before
         # taking the pixel aspect ratio into account. We need to get the actual
         # size of the texture to display
-        frame_width, frame_height = texture.get_size()
-        new_height = (frame_height * stage_width) / frame_width
+        frame_width, frame_height = self._video_texture.get_size()
+        try:
+            new_height = (frame_height * stage_width) / frame_width
+        except ZeroDivisionError, e:
+            print("In _resize_image: %s" % (e,))
+            return
         if new_height <= stage_height:
             new_width = stage_width
             new_x = 0;
@@ -134,8 +143,8 @@ class Application(object):
             new_height = stage_height
             new_x = (stage_width - new_width) / 2
             new_y = 0
-        texture.set_position(new_x, new_y)
-        texture.set_size(new_width, new_height)
+        self._video_texture.set_position(new_x, new_y)
+        self._video_texture.set_size(new_width, new_height)
 
 
     def _stage_key_press_event_cb(self, stage, event):
@@ -146,8 +155,8 @@ class Application(object):
         if is_ctrl_pressed:
             if symbol == Clutter.KEY_q:
                 self.quit()
-            elif symbol == Clutter.KEY_Escape:
-                self.toggle_fullscreen()
+        elif symbol == Clutter.KEY_Escape:
+            self.toggle_fullscreen()
         else:
             # Each letter triggers a clip
             try:
@@ -192,9 +201,11 @@ class Application(object):
         Toggles fullscreen.
         """
         if self._is_fullscreen:
-            self.stage.set_fullscreen(False)
+            self._stage.set_fullscreen(False)
+            self._is_fullscreen = False
         else:
-            self.stage.set_fullscreen(True)
+            self._stage.set_fullscreen(True)
+            self._is_fullscreen = True
 
 
 if __name__ == "__main__":
